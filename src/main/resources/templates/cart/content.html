@@ -454,21 +454,14 @@
 						<tr th:each="cart, status : ${cartList}" class="cart-tr-product" th:id="'cart-tr-'+${status.index}">
 							<td>
 								<!-- 선택 상품 -->
-								<input type="checkbox" name="cart_ck" th:id="'c-checkbox-pdsid'+${status.index}" th:value="${cart.productDetailNo}+'_'+${cart.psize}">
-								
-								
-								<!-- <c:if test="${cart.stock >= cart.amount}">
-									checked
-								</c:if>
-								<c:if test="${cart.stock < cart.amount}">
-									disabled
-								</c:if>
-								
-								<div id="div-erroricon${status.index}"
-								<c:if test="${cart.stock >= cart.amount}">
-									style="display:none;"
-								</c:if>
-								><i class="fas fa-exclamation-circle"></i></div>  -->
+								<th:block th:if="${cart.stock >= cart.amount}">
+									<input type="checkbox" name="cart_ck" th:id="'c-checkbox-pdsid'+${status.index}" th:value="${cart.productDetailNo}+'_'+${cart.psize}" checked>
+									<div id="div-erroricon${status.index}" style="display:none;"><i class="fas fa-exclamation-circle"></i></div>
+								</th:block>
+								<th:block th:if="${cart.stock < cart.amount}">
+									<input type="checkbox" name="cart_ck" th:id="'c-checkbox-pdsid'+${status.index}" th:value="${cart.productDetailNo}+'_'+${cart.psize}" disabled>
+									<div id="div-erroricon${status.index}"><i class="fas fa-exclamation-circle"></i></div>
+								</th:block>
 							</td>
 							<td class="c-td-product">
 								<div>
