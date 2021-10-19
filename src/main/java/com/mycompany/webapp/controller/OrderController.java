@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,13 +60,14 @@ public class OrderController {
 
 	
 	@RequestMapping("/orderForm")
-	public String orderForm(Principal principal,Model model,HttpServletRequest request) {
+	public String orderForm(Authentication auth,Model model,HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		List<ProductDTO> orderList = (List<ProductDTO>) session.getAttribute("orderList");
 		int totalPrice = 0;
 		
-		Map<String,Object> map = memberService.getMemberOrderInfo(principal.getName(),orderList);
+		logger.info(auth.getName());
+		Map<String,Object> map = memberService.getMemberOrderInfo(auth.getName(),orderList);
 		MemberDTO memberDTO = (MemberDTO) map.get("memberDTO");
 		List<CardDTO> cardList = (List<CardDTO>)map.get("cardList");
 		List<VirtureAccountDTO> virtureAccountList = (List<VirtureAccountDTO>)map.get("virtureAccountList");
