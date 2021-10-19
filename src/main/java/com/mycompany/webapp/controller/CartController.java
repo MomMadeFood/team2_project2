@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,11 +28,12 @@ import com.mycompany.webapp.service.StockService;
 import com.mycompany.webapp.service.StockService.StockResult;
 import com.mycompany.webapp.service.product.ProductDetailService;
 
+import lombok.extern.log4j.Log4j2;
+
 @Controller
+@Log4j2
 @RequestMapping("/cart")
 public class CartController {
-	private static final Logger logger = LoggerFactory.getLogger(CartController.class);
-	
 	@Resource private CartService cartService;
 	@Resource private ProductDetailService productDetailService;
 	@Resource private StockService stockService;
@@ -43,7 +42,7 @@ public class CartController {
 	public String cart(
 			Principal principal,
 			Model model) {
-		logger.info("실행");
+		log.info("실행");
 		
 		List<ProductDTO> cartList = cartService.getCarts(principal.getName());
 		int totalPrice = 0;
@@ -63,6 +62,8 @@ public class CartController {
 		List<CartDTO> selectedCartList;
 		//cartSelectedList : 카트에서 선택한 제품들의 코드, 
 		//			코드 형식 : 제품상세번호_사이즈 (ex. TN2B7WSHG03N_BL_S)
+		
+		log.info("실행");
 		
 		selectedCartList= cartService.getCartsByPdsid(principal.getName(), cartSelectedList);
 		//매진 상품 확인
@@ -187,7 +188,7 @@ public class CartController {
 			String productNo = st.nextToken();
 			String colorCode = st.nextToken();
 			
-			logger.info(cartDTO.toString());
+			log.info(cartDTO.toString());
 
 			CartResult cr = cartService.updateCart(cartDTO);
 			
@@ -231,12 +232,12 @@ public class CartController {
 			jsonObject.put("result", "errer-login");
 		} else {
 			cartDTO.setMemberId(principal.getName());
-			logger.info(cartDTO.toString());
+			log.info(cartDTO.toString());
 			
 			CartResult cr = cartService.updateAmount(cartDTO);
 			if(cr== CartResult.SUCCESS_NOT_ENOUGH_STOCK) {
 				jsonObject.put("result", "warn-stock");
-				logger.info(cartDTO.toString());
+				log.info(cartDTO.toString());
 				int amount = cartService.getAmountByCart(cartDTO);
 				jsonObject.put("amount", amount);
 			} else if(cr == CartResult.FAIL_NOT_ENOUGH_STOCK) {
