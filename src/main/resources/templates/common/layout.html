@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+   <th:block th:fragment="setContent(content)" >
+     <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>더한섬닷컴</title>
+
+        <link rel="stylesheet" th:href="@{/bootstrap-4.6.0-dist/css/bootstrap.min.css}">
+		<script th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
+		<script th:src="@{/bootstrap-4.6.0-dist/js/bootstrap.bundle.min.js}"></script>
+		
+		<!-- header -->
+		<script th:src="@{/js/jquery.sticky.js}"></script>
+		<script th:src="@{/js/main.js}"></script>
+		<script th:src="@{/js/owl.carousel.min.js}"></script>
+		
+		
+		<link rel="stylesheet" th:href="@{/css/app.css}" />
+		<link rel="stylesheet" th:href="@{/css/cart.css}" />
+		<link rel="stylesheet" th:href="@{/css/header.css}" />
+		<link rel="stylesheet" th:href="@{/css/footer.css}" />
+		<link rel="stylesheet" th:href="@{/css/style.css}" />
+		
+		<!-- 사진 swiper -->
+		<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+		<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+		<script src="https://kit.fontawesome.com/90405714d1.js" crossorigin="anonymous"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+     </head>
+     <body>
+	       <div class="site-mobile-menu site-navbar-target">
+	        <div class="site-mobile-menu-header">
+	          <div class="site-mobile-menu-close mt-3">
+	            <span class="icon-close2 js-menu-toggle"></span>
+	          </div>
+	        </div>
+	        <div class="site-mobile-menu-body"></div>
+	      </div>
+	
+	      <header class="site-navbar js-sticky-header site-navbar-target mb-5" role="banner" style="background-color:#F5F5F5">
+	        <div class="container">
+	          <div class="row position-relative">
+	            <div class="mt-4">
+	              <a th:href="@{/}" class="text-black"><img th:src="@{/images/logo.png}" alt="HANDSOME" class="ml-3" /></a>
+	            </div>
+	
+	            <div style="width:60%;">
+	              <nav class="site-navigation text-center ml-auto " role="navigation">
+	
+	                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+	
+	                  <li class="has-children">
+	                    <a th:href="@{/product/productList?categoryId=WO}" class="nav-link h-a-lg" style="font-size:13pt;">WOMEN</a>
+	                    <ul class="dropdown arrow-top">
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=WO01}">OUTER</a>
+	                      </li>
+	                      <li>
+							<a th:href="@{/product/productList?categoryId=WO02}">DRESS</a>
+						  </li>
+						  <li>
+							<a th:href="@{/product/productList?categoryId=WO03}">SKIRT</a>
+						  </li>
+						  <li>
+						   	<a th:href="@{/product/productList?categoryId=WO04}">TOP</a>
+						  </li>
+						  <li>
+							<a th:href="@{/product/productList?categoryId=WO05}">PANTS</a>
+						  </li>
+						  <li>
+							<a th:href="@{/product/productList?categoryId=WO10}">SPECIAL SHOP</a>
+						  </li>
+						  <li>
+						 	<a th:href="@{/product/productList?categoryId=WO11}">FASHION ACC</a>
+						  </li>
+	                    </ul>
+	                  </li>
+	                  <li class="has-children">
+	                    <a th:href="@{/product/productList?categoryId=ME}" class="nav-link" style="font-size:13pt;">MEN</a>
+	                    <ul class="dropdown arrow-top">
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=ME01}">OUTER</a>
+	                      </li>
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=ME04}">TOP</a>
+	                      </li>
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=ME05}">PANTS</a>
+	                      </li>
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=ME10}">SPECIAL SHOP</a>
+	                      </li>
+	                    </ul>
+	                  </li>
+	                  
+	                  <li class="has-children">
+	                    <a th:href="@{/product/productList?categoryId=KI}" class="nav-link h-a-lg" style="font-size:13pt;">KIDS</a>
+	                    <ul class="dropdown arrow-top">
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=KI06}">CLOTHING</a>
+	                      </li>
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=KI08}">KIDS ACC</a>
+	                      </li>
+	                    </ul>
+	                  </li>
+	                  
+	                  <li class="has-children">
+	                    <a th:href="@{/product/productList?categoryId=LI}" class="nav-link h-a-lg" style="font-size:13pt;">LIFE</a>
+	                    <ul class="dropdown arrow-top">
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=LI07}">BATH</a>
+	                      </li>
+	                      <li>
+	                        <a th:href="@{/product/productList?categoryId=LI09}">HOME</a>
+	                      </li>
+	                    </ul>
+	                  </li>
+	                  
+	                  <li><a th:href="@{/event/coupon}" class="nav-link h-a-lg" style="font-size:13pt;">EVENT</a></li>
+	                </ul>
+	              </nav>
+	
+	            </div>
+	            
+	            <div class="mt-1" style="width:20%;">
+	              <nav class="site-navigation text-center ml-auto " role="navigation">
+	
+	                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+	           			<li>
+	           			 <a th:href="@{/cart}"><i class="fas fa-shopping-cart fa-lg"></i></a>
+						</li>
+						<li>
+	           			 <a th:href="@{/order/orderList}"><i class="fas fa-clipboard-list fa-lg"></i></a>
+						</li>
+						<th:block sec:authorize="!isAuthenticated()">
+		                    <li>
+			           			 <a th:href="@{/member/loginForm}"><i class="fas fa-sign-in-alt fa-lg" style="color:#8db5ff;"></i></a>
+							</li>
+		                 </th:block>
+		                 <th:block sec:authorize="isAuthenticated()">
+		                    <li style="padding:12px;">
+								<a th:href="@{/logout}" style="border: none; background-color:transparent;"><i class="fas fa-sign-out-alt fa-lg" style="color:#ff7a7a;"></i></a> 
+							</li>
+		                 </th:block>
+	                </ul>   
+	              </nav>
+	            </div>
+	          </div>
+	        </div>
+	 	 </header>
+	 	 
+	 	 
+	 	 <th:block th:replace="${content}"/>
+	 	 
+	 	
+		<div class= "footer" style="background-color:#F5F5F5; height:100px; width:100%;">
+			<a th:href="@{/}" class="text-black"><img th:src="@{/images/logo.png}" alt="HANDSOME" class="float-right" style="margin-right:200px; margin-top:50px;"></a>
+		</div>
+     </body>
+   </th:block>
+</html>
