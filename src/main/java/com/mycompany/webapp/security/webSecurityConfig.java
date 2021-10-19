@@ -26,6 +26,9 @@ public class webSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Resource
 	private PasswordEncoder passwordEncoder;
+	
+	@Resource
+	private MemberLoginFailureHandler memberLoginFailureHandler;
 
 	// 회원가입을 할 때등 여러 곳에서 패스워드 인코더를 사용하기 때문에 관리 빈으로 반드시 등록해야 한다.
 	@Bean // @Bean : 메소드가 return 하는 객체를 관리 객체로 만들어준다.
@@ -50,12 +53,12 @@ public class webSecurityConfig extends WebSecurityConfigurerAdapter {
 		log.info("configure(HttpSecurity http) 실행");
 		// 로그인 설정
 		http.formLogin()
-			.loginPage("/member/loginForm") // default: /login(GET)
-			.usernameParameter("id") // default: username
-			.passwordParameter("password") // default: password
-			.loginProcessingUrl("/login") // default: /login(POST) - form에서 무조건 POST 방식으로 요청해야한다.
-			.defaultSuccessUrl("/", false) // default: /
-			.failureUrl("/member/loginForm"); // default: /login?error
+			.loginPage("/member/loginForm") 
+			.usernameParameter("id") 
+			.passwordParameter("password")
+			.loginProcessingUrl("/login")
+			.defaultSuccessUrl("/", false)
+			.failureHandler(memberLoginFailureHandler);
 
 		// 로그아웃 설정
 		http.logout().logoutUrl("/logout") // default: /logout
