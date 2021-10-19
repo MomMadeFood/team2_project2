@@ -52,7 +52,7 @@ public class CartController {
 		}
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("cartList", cartList);
-		return "cart/cart";
+		return "cart/content";
 	}
 	
 	@PostMapping("/orderForm") 
