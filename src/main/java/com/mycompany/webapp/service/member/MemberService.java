@@ -50,10 +50,14 @@ public class MemberService {
 		MemberDTO memberDTO = memberDAO.selectMemberById(memberId);
 		memberDTO.setPoint(point);
 		
-		System.out.println(productList.get(0));
-		for(ProductDTO productDTO :  productList) {
-			productDetailList.add(productDAO.selectProductByProduct(productDTO));
+		//System.out.println(productList.get(0));
+		/*
+		if(productList.size()>0) {
+			for(ProductDTO productDTO :  productList) {
+				productDetailList.add(productDAO.selectProductByProduct(productDTO));
+			}			
 		}
+*/
 
 		map.put("cardList",cardList);
 		map.put("virtureAccountList",virtureAccountList);
