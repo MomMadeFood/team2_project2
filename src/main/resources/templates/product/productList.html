@@ -3,12 +3,12 @@
 <th:block th:replace="~{common/layout::setContent(~{this::content})}">
 <th:block th:fragment="content">
 
-<div  class=" navbar-expand-lg navbar-light bg-light" style="text-align: center;">
+<div  class="navbar-expand-lg navbar-light bg-light" style="text-align: center;">
 	<div style="width: 990px; display:inline-block;">
 	  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-	    <div class="navbar-nav d-flex flex-wrap">
+	    <div class="navbar-nav d-flex flex-wrap pt-3 pb-2">
 	    	<th:block th:each="subCategory: ${subCategoryList}">
-	    	 <a class="nav-link inline-block" style="width:220px; text-align:left;" th:href="@{'productList?categoryId='+${subCategory.categoryId}}">[[${subCategory.categoryName}]]</a>
+	    	 <a class="text-center nav-link inline-block" style="width:247px; text-align:left;" th:href="@{'productList?categoryId='+${subCategory.categoryId}}">[[${subCategory.categoryName}]]</a>
 	    	</th:block>
 	    </div>
 	  </div>
