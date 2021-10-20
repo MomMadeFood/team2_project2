@@ -6,10 +6,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -19,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,10 +37,12 @@ import com.mycompany.webapp.service.CategoryService;
 import com.mycompany.webapp.service.product.ProductDetailService;
 import com.mycompany.webapp.service.product.ProductService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/product")
+@Slf4j
 public class ProductController {
-	Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@Resource
 	private ProductDetailService productDetailService;
@@ -206,7 +204,7 @@ public class ProductController {
 	public String updateAmount(
 			@RequestBody CartDTO cartDTO,
 			Principal principal) {
-		logger.info("실행");
+		log.info("실행");
 		JSONObject jsonObject = new JSONObject();
 		
 		if(principal == null) {

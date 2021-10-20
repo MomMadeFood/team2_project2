@@ -241,10 +241,10 @@
 		} else if(endDate && !startDate){
 			alert("날짜를 올바르게 입력하세요.");
 		}else{
-			sessionStorage.setItem("startDate", startDate);
-			sessionStorage.setItem("endDate", endDate);
-			sessionStorage.setItem("searchType", searchType);
-			sessionStorage.setItem("searchTerm", searchTerm);
+			localStorage.setItem("startDate", startDate);
+			localStorage.setItem("endDate", endDate);
+			localStorage.setItem("searchType", searchType);
+			localStorage.setItem("searchTerm", searchTerm);
 			$.ajax({
 				url: "orderListAjax",
 				data: {
@@ -263,10 +263,10 @@
 	}
 	
 	function pageBtn(pageno){
-		var startDate = sessionStorage.getItem("startDate");
-		var endDate = sessionStorage.getItem("endDate");
-		var searchType = sessionStorage.getItem("searchType");
-		var searchTerm = sessionStorage.getItem("searchTerm");
+		var startDate = localStorage.getItem("startDate");
+		var endDate = localStorage.getItem("endDate");
+		var searchType = localStorage.getItem("searchType");
+		var searchTerm = localStorage.getItem("searchTerm");
 		if(startDate && !endDate){
 			alert("날짜를 올바르게 입력하세요.");
 		} else if(endDate && !startDate){
@@ -281,7 +281,6 @@
 		}
 	}
 	
-	
 	function cancelOrderAjax(data){
 		$.ajax({
 			type:"POST",
@@ -292,6 +291,11 @@
 			location.href = window.location.href;
 		});
 	}
+	
+	$(window).bind('beforeunload', function(e){
+		localStorage.clear();
+	});
+	
 </script>
 
 </th:block>

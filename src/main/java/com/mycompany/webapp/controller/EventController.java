@@ -47,7 +47,6 @@ public class EventController {
 		return "event/coupon";
 	}
 	
-	
 	@PostMapping(value="/issueCoupon", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String issueCoupon(

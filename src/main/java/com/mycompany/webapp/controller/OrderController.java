@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,13 +37,12 @@ import com.mycompany.webapp.service.coupon.CouponService;
 import com.mycompany.webapp.service.member.MemberService;
 import com.mycompany.webapp.service.order.OrderService;
 
-
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/order")
+@Slf4j
 public class OrderController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 	
 	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 	
@@ -65,7 +62,6 @@ public class OrderController {
 		List<ProductDTO> orderList = (List<ProductDTO>) session.getAttribute("orderList");
 		int totalPrice = 0;
 		
-		logger.info(auth.getName());
 		Map<String,Object> map = memberService.getMemberOrderInfo(auth.getName(),orderList);
 		MemberDTO memberDTO = (MemberDTO) map.get("memberDTO");
 		List<CardDTO> cardList = (List<CardDTO>)map.get("cardList");
@@ -96,7 +92,6 @@ public class OrderController {
 		int pointSum = (int) map.get("pointSum");
 		int couponSum = (int) map.get("couponSum");
 		int priceTotal = (int) map.get("priceTotal");
-		
 		
 		model.addAttribute("mOrderDTO",(MOrderDTO)map.get("mOrderDTO"));
 		model.addAttribute("productList",map.get("productList"));
@@ -154,7 +149,6 @@ public class OrderController {
 				param.put("name", searchTerm);
 				int totalRows = orderService.getCntOrderListByName(param);
 				pager = new Pager(5, 5, totalRows, pageno);
-				logger.info(">>>" + totalRows);
 				param.put("startRowNo", pager.getStartRowNo());
 				param.put("endRowNo", pager.getEndRowNo());
 				orderList = orderService.getOrderListByName(param);
@@ -178,9 +172,7 @@ public class OrderController {
 		Callable< Map<String,String> > task = new Callable<Map<String,String>>() {
 			@Override
 			public Map<String,String> call() throws Exception {
-
 				Map<String,String> resultMap = orderService.insertMOrder(mOrderDTO);
-				
 				return resultMap;
 			}
 		};
@@ -208,26 +200,22 @@ public class OrderController {
 	@ResponseBody
 	public String oneClickAjax(MemberDTO memberDTO) {
 		int result = memberService.checkOneClickPassword(memberDTO);
-		logger.info("result: "+result);
+		log.info("result: "+result);
 		JSONObject jsonObject = new JSONObject();
 		if(result==1) {
 			jsonObject.put("result","success");
 		}else {
 			jsonObject.put("result","fail");
 		}
-		
 		String json = jsonObject.toString();
 		return json;
-		
 	}
-
-	
 	
 	@PostMapping(value="/cancelOrderAjax",produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String cancelOrderAjax(Principal principal,OrderDetailDTO orderDetailDTO) {
 		
-		logger.info(orderDetailDTO.toString());
+		log.info(orderDetailDTO.toString());
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("memberId",principal.getName());
 		map.put("orderDetailDTO",orderDetailDTO);

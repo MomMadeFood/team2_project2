@@ -28,10 +28,10 @@ import com.mycompany.webapp.service.StockService;
 import com.mycompany.webapp.service.StockService.StockResult;
 import com.mycompany.webapp.service.product.ProductDetailService;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Log4j2
+@Slf4j
 @RequestMapping("/cart")
 public class CartController {
 	@Resource private CartService cartService;

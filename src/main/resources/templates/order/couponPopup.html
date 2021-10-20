@@ -8,9 +8,7 @@
 <body>
 	<script th:inline="javascript">
 		$(function (){
-			
 			var couponList = [[${couponList}]];
-			console.log(couponList);
 			if(couponList.length==0){
 				alert("사용 가능한 쿠폰이 없습니다.");
 				window.close();
@@ -50,10 +48,10 @@
 			</thead>
 			<tbody>
 				<th:block th:each="coupon, status : ${couponList}">
-	      			<tr class="cp-tr txt tr-${status.count}">
+	      			<tr th:class="|cp-tr txt tr-${status.count}|">
 						<td class="detail-id" style="border-left: 1px solid #E5E5E5; border-right: 1px solid #E5E5E5;">
 							<div style="text-align:left; margin-left:20px">
-								<input type="radio" name="chk_coupon" value="${status.count}"/>　
+								<input type="radio" name="chk_coupon" th:value="${status.count}"/>　
 								<span style="text-align:left">[[${coupon.title}]]</span>
 							</div>
 						</td>
@@ -78,7 +76,7 @@
 		<div class="cp-btn-outer-wrap">
 			<div class="cp-btn-inner-wrap">
 				<button class="cp_lg_btn_white" onclick="javascript:window.close()">취소</button>
-				<button class="cp_lg_btn_black" onclick="javascript:applyCoupon()">쿠폰선택</button>
+				<button class="cp_lg_btn_black" th:onclick="applyCoupon()">쿠폰선택</button>
 			</div>
 		</div>
 		<div id="indexBox" style="display:none">[[${index}]]</div>
