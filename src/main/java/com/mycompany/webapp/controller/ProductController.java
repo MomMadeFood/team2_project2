@@ -90,70 +90,64 @@ public class ProductController {
 		List<ProductDTO> withProductList = productDetailService.getWithproductByPdId(no);
 		model.addAttribute("withProductList", withProductList);
 		
+		Cookie cookie = new Cookie("rp"+(new Date().getTime()), no);
+		cookie.setPath("/");
+		cookie.setMaxAge(24*60*60); // 24*60*60 은 하루
+		cookie.setHttpOnly(true); // java script에서 쿠키를 읽지 못하게 함
+		response.addCookie(cookie);
 		Cookie[] cookies = request.getCookies();
 		Map<String, String> cookieMap = new TreeMap<>();
 		
-		if(cookies.length==1) {
-			Cookie cookie = new Cookie("rp"+(new Date().getTime()), no);
-			cookie.setPath("/");
-			cookie.setMaxAge(24*60*60); // 24*60*60 은 하루
-			cookie.setHttpOnly(true); // java script에서 쿠키를 읽지 못하게 함
-			response.addCookie(cookie);
-		}else {
+		if(cookies !=null && cookies.length>0) {
 			// 쿠키에 있는 쿠키값들 cookieMap에 담기
 			for(Cookie c : cookies) {
 				String name = c.getName();
 				if (!name.equals("JSESSIONID")) 
 					cookieMap.put(c.getName(), c.getValue());
-			}
-			
-			// 쿠키안에 있는 상품인지 확인 
-			boolean chkCookie = false;
-			String alreadyKey = "";
-			for(Map.Entry e : cookieMap.entrySet()) {
-				if(no.equals(e.getValue())) {
-					chkCookie = true;
-					alreadyKey = (String) e.getKey();
+				
+				// 쿠키안에 있는 상품인지 확인 
+				boolean chkCookie = false;
+				String alreadyKey = "";
+				for(Map.Entry e : cookieMap.entrySet()) {
+					if(no.equals(e.getValue())) {
+						chkCookie = true;
+						alreadyKey = (String) e.getKey();
+					}
 				}
-			}
 
-			Cookie cookie = new Cookie("rp"+(new Date().getTime()), no);
-			cookie.setPath("/");
-			cookie.setMaxAge(24*60*60); // 24*60*60 은 하루
-			cookie.setHttpOnly(true);
-			response.addCookie(cookie);
-			
-			if(!chkCookie) { // 존재하지 않는 쿠키
-				// 쿠키가 3개보다 클 경우 삭제
-				int cookieSize = cookieMap.size();
-				while(cookieSize-- > 3) {
-					String key = (String) cookieMap.keySet().toArray()[0];
-					cookieMap.remove(key);
-					Cookie deleteCookie = new Cookie(key, null);
+				
+				if(!chkCookie) { // 존재하지 않는 쿠키
+					// 쿠키가 3개보다 클 경우 삭제
+					int cookieSize = cookieMap.size();
+					while(cookieSize-- > 3) {
+						String key = (String) cookieMap.keySet().toArray()[0];
+						cookieMap.remove(key);
+						Cookie deleteCookie = new Cookie(key, null);
+						deleteCookie.setMaxAge(0);
+						deleteCookie.setHttpOnly(true);
+						deleteCookie.setPath("/");
+						response.addCookie(deleteCookie);
+					}
+				}else { // 이미 존재하는 쿠키
+					cookieMap.remove(alreadyKey);
+					Cookie deleteCookie = new Cookie(alreadyKey, null);
 					deleteCookie.setMaxAge(0);
 					deleteCookie.setHttpOnly(true);
 					deleteCookie.setPath("/");
 					response.addCookie(deleteCookie);
 				}
-			}else { // 이미 존재하는 쿠키
-				cookieMap.remove(alreadyKey);
-				Cookie deleteCookie = new Cookie(alreadyKey, null);
-				deleteCookie.setMaxAge(0);
-				deleteCookie.setHttpOnly(true);
-				deleteCookie.setPath("/");
-				response.addCookie(deleteCookie);
+				
+				List<ProductDTO> recentPd = new ArrayList<>();
+				int cnt = 0;
+				for(Map.Entry e : cookieMap.entrySet()) {
+					if(cnt++ < 3)
+						recentPd.add(productDetailService.getProductDetailByPdNo((String)e.getValue()));
+				}
+				Collections.reverse(recentPd);
+				model.addAttribute("recentPd", recentPd);
 			}
-			
-			List<ProductDTO> recentPd = new ArrayList<>();
-			int cnt = 0;
-			for(Map.Entry e : cookieMap.entrySet()) {
-				if(cnt++ < 3)
-					recentPd.add(productDetailService.getProductDetailByPdNo((String)e.getValue()));
-			}
-			Collections.reverse(recentPd);
-			model.addAttribute("recentPd", recentPd);
 		}
-		
+			
 		return "product/productDetail";
 	}
 	
