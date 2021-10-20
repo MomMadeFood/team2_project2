@@ -38,6 +38,8 @@ import com.mycompany.webapp.service.coupon.CouponService;
 import com.mycompany.webapp.service.member.MemberService;
 import com.mycompany.webapp.service.order.OrderService;
 
+import jdk.internal.org.jline.utils.Log;
+
 
 @Controller
 @RequestMapping("/order")
@@ -53,10 +55,8 @@ public class OrderController {
 	@Resource
 	private MemberService memberService;
 	
-	
 	@Resource
 	private CouponService couponService;
-
 	
 	@RequestMapping("/orderForm")
 	public String orderForm(Principal principal,Model model,HttpServletRequest request) {
@@ -153,6 +153,7 @@ public class OrderController {
 				param.put("name", searchTerm);
 				int totalRows = orderService.getCntOrderListByName(param);
 				pager = new Pager(5, 5, totalRows, pageno);
+				logger.info(">>>" + totalRows);
 				param.put("startRowNo", pager.getStartRowNo());
 				param.put("endRowNo", pager.getEndRowNo());
 				orderList = orderService.getOrderListByName(param);

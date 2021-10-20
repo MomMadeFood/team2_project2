@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{common/layout::setContent(~{this::content})}">
+<th:block th:fragment="content">
+	
+<link rel="stylesheet" th:href="@{/css/orderList.css}" />
+
+<div class="mt-5">
+	<div style="width: 990px; margin: 0px auto;">
+	  <div style="display:flex; justify-content:center; width:100%">
+			<h4>주문/배송/반품/취소</h4>
+	  </div>
+  </div>
+</div>
+
+
+<div class="mt-5">
+	<div style="width: 990px; margin: 0px auto; background-color: #f5f5f5;">
+		<div>
+			<div style="display:flex; justify-content:between; width:100%">
+				<div class="search-order-input">
+					<div class="date-search-order ">
+						<span class="txt" style="padding-right: 10px"> 조회기간</span> 
+						<input type="date" id="startDate" name="findStartDate"/> - 
+						<input type="date" id="endDate" name="findEndDate"/>
+						<button type="button" class="btn btn-sm btn-outline-secondary btn-search" onclick="oneWeekBtn()">1주일</button>
+						<button type="button" class="btn btn-sm btn-outline-secondary btn-search" onclick="oneMonthBtn()">1개월</button>
+						<button type="button" class="btn btn-sm btn-outline-secondary btn-search" onclick="threeMonthBtn()">3개월</button>
+					</div>
+					<div class="content-search-order">
+						<span class="txt" style="padding-right: 10px"> 검색구분 </span> 
+						<select name="searchType" id="searchType">
+							<option value="0" selected>상품명</option>
+							<option value="1">주문번호</option>
+						</select> 
+						<input type="text" id="searchTerm" name="searchTerm" style="width:418px"/>
+					</div>
+				</div>
+				<div class="search-order-input2" style="padding-top:17px; padding-left:10px;">
+					<button class="btn btn-md btn-dark mt-3" style="width:100px; height:70px;" onclick="searchBtn()">조회하기</button>
+					<button class="btn btn-md btn-outline-dark mt-3" style="width:100px; height:70px;" onclick="resetBtn()">초기화</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="orderContent">
+	<div class="mt-5" >
+	  <div style="width:990px; margin: 0px auto;">
+		<div style="display:flex; justify-content: space-between ;margin-top:40px">
+		  <div>
+		    <h5 style="font-weight:700">주문상품</h5>
+		  </div>
+		</div>
+	    <div>
+		  	<table class="table" style="border-bottom:1px solid #E5E5E5; margin-top:20px">
+			  <colgroup>
+			    <col width="15%"/>
+			    <col width="42%"/>
+			    <col width="7%"/>
+			    <col width="12%"/>
+			    <col width="12%"/>
+			    <col width="12%"/>
+			  </colgroup>
+			  <thead style="background-color: #F5F5F5;">
+			    <tr style="text-align: center; height:47px; font-size:15px; ">
+	    		  <th scope="col">주문번호</th>
+			      <th scope="col">상품정보</th>
+			      <th scope="col">수량</th>
+			      <th scope="col">금액</th>
+			      <th scope="col">주문상태</th>
+			      <th scope="col">구분</th>
+			    </tr>
+			  </thead>
+		  	  <th:block th:each="order : ${orderList}">
+			   	<tbody class="txt">
+			   		 <th:block th:each="orderDetail, status : ${order.detailList}">
+				  	  <tr style="height:150px;">
+				  	  	  <th:block th:if="${status.first}">
+						      <td style="vertical-align:middle" th:rowspan="${#lists.size(order.detailList)+1}">
+						      	<p>[[${order.orderNo}]]</p>
+						      	<p style="color:#dee2e6">[[${#dates.format(order.orderDate, 'yyy/MM/dd HH:mm:ss')}]]</p>
+						      	<a th:href="@{/order/orderDetail(orderNo=${order.orderNo})}" style="color: #ecd795">상세보기</a>
+						      </td>
+					      </th:block>
+					      <td style="vertical-align:middle; border-top:none;">
+					        <div style="display: flex; justify-content:between">
+					          <div>
+					            <img th:src="${orderDetail.img1}" style="width:98px; height:98px;">
+					          </div>
+					          <div style="text-align:left; margin-left:20px;">
+					            <a style="color:black;" href="@{/product/productDetail(no=${orderDetail.productDetailNo})}" >
+					              [[${orderDetail.brand}]]<br/>
+					              [[${orderDetail.name}]]
+					            </a>
+					            <p style="margin-top: 10px;font-size:12px;color:#CCC7CD">color :  <img th:src="${orderDetail.colorChip}" alt="" width="20px" height="20px"> / size : [[${orderDetail.psize}]]</p>
+					          </div>
+					        </div>
+					      </td>
+					      <td style="vertical-align:middle"><p>[[${orderDetail.amount}]]</p></td>
+					      <td style="vertical-align:middle">
+					      	<th:block th:if="${orderDetail.state!=6}">
+				      			<p>₩[[${#numbers.formatInteger(orderDetail.price+orderDetail.discount,3,'COMMA')}]]</p>
+					      	</th:block>
+					      	<th:block th:if="${orderDetail.state==6}">
+					      		<p>₩0</p>
+					      	</th:block>
+					      </td>
+					      <td style="vertical-align:middle">
+					      	<p>
+					      		<th:block th:if="${orderDetail.state == 1}">입금대기중</th:block>
+					      		<th:block th:if="${orderDetail.state == 2}">주문완료</th:block>
+					      		<th:block th:if="${orderDetail.state == 3}">배송준비중</th:block>
+					      		<th:block th:if="${orderDetail.state == 4}">배송중</th:block>
+					      		<th:block th:if="${orderDetail.state == 5}">배송완료</th:block>
+					      		<th:block th:if="${orderDetail.state == 6}">주문취소</th:block>
+					      	</p>
+			      		</td>
+					      <td style="vertical-align:middle">
+					      	<p>
+					      		<th:block th:if="${orderDetail.state == 1}">
+									<a th:href="|javascript:cancelOrderAjax(
+									{'orderDetailNo':'${orderDetail.orderDetailNo}',
+									'productDetailNo':'${orderDetail.productDetailNo}',
+									'psize':'${orderDetail.psize}',
+									'amount':${orderDetail.amount},
+									'price':${orderDetail.price}
+									})|" class="btn btn-sm btn-outline-secondary btn-search">주문취소</a>					      		
+					      		</th:block>
+					      	</p>
+			      		</td>
+				      </tr>
+				  </th:block>
+				  <tr style="height:50px;">
+				  	<td colspan="5" class="order-info" style="border:none; text-align: right; border-right: 1px solid #E5E5E5;">
+				  		총 결제 금액 : ₩[[${#numbers.formatInteger(order.totalOrderPrice,3,'COMMA')}]]
+				  	</td>
+			  	  </tr>
+			    </tbody>
+			  </th:block>
+			</table>
+		</div>
+	</div>
+  </div>
+
+  <div class="mt-5">
+	<div style="width: 990px; margin: 0px auto;">
+	  <div style="display:flex; justify-content:center; width:100%">
+	  	<th:block th:if="${pager.totalRows != 0}">
+	  		<nav aria-label="Page navigation example">
+			  <ul class="pagination">
+			  
+			    <li class="page-item">
+			      <a class="page-link" href="orderList?pageno=1" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+			    </li>
+			    
+			    <th:block th:if="${pager.groupNo!=1}">
+				  <li class="page-item">
+			        <a class="page-link" th:href="@{/order/orderList(pageno=${pager.startPageNo-1})}" aria-label="Next">
+			          <span aria-hidden="true">&lt;</span>
+			         </a>
+			      </li>
+				</th:block>
+			   
+			   <th:block th:each="i : ${#numbers.sequence(pager.startPageNo, pager.endPageNo)}">
+				 <th:block th:if="${pager.pageNo !=i}">
+				   <li class="page-item">
+				     <a class="page-link" th:href="@{/order/orderList(pageno=${i})}">[[${i}]]</a>
+				   </li>
+				 </th:block>
+				 <th:block th:if="${pager.pageNo ==i}">
+				   <li class="page-item active">
+				     <a class="page-link" th:href="@{/order/orderList(pageno=${i})}">[[${i}]]</a>
+				   </li>
+				  </th:block>
+				</th:block>
+				
+				<th:block th:if="${pager.groupNo!=pager.totalGroupNo}">
+				  <li class="page-item">
+			        <a class="page-link" th:href="@{/order/orderList(pageno=${pager.endPageNo+1})}" aria-label="Next">
+			          <span aria-hidden="true">&gt;</span>
+			         </a>
+			      </li>
+				</th:block>
+			    <li class="page-item">
+			      <a class="page-link" th:href="@{/order/orderList(pageno=${pager.totalPageNo})}" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			       </a>
+			    </li>
+	   	      </ul>
+		    </nav>
+	  	</th:block>
+	  </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+	function oneWeekBtn(){
+		var endDate = new Date();
+		document.getElementById("endDate").valueAsDate = endDate;
+		var now = new Date();
+		var startDate = new Date(now.setDate(now.getDate()-7));
+		document.getElementById("startDate").valueAsDate = startDate;
+	}
+	
+	function oneMonthBtn(){
+		var endDate = new Date();
+		document.getElementById("endDate").valueAsDate = endDate;
+		var now = new Date();
+		var startDate = new Date(now.setMonth(now.getMonth()-1));
+		document.getElementById("startDate").valueAsDate = startDate;
+	}
+	
+	function threeMonthBtn(){
+		var endDate = new Date();
+		document.getElementById("endDate").valueAsDate = endDate;
+		var now = new Date();
+		var startDate =  new Date(now.setMonth(now.getMonth()-3));
+		document.getElementById("startDate").valueAsDate = startDate;
+	}
+	
+	function resetBtn(){
+		$("#startDate").val("");
+		$("#endDate").val("");
+		$("#searchTerm").val("");
+	}
+	
+	function searchBtn(){
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		var searchType = $("#searchType  option:selected").val();
+		var searchTerm = $("#searchTerm").val();
+		if(startDate && !endDate){
+			alert("날짜를 올바르게 입력하세요.");
+		} else if(endDate && !startDate){
+			alert("날짜를 올바르게 입력하세요.");
+		}else{
+			sessionStorage.setItem("startDate", startDate);
+			sessionStorage.setItem("endDate", endDate);
+			sessionStorage.setItem("searchType", searchType);
+			sessionStorage.setItem("searchTerm", searchTerm);
+			$.ajax({
+				url: "orderListAjax",
+				data: {
+					pageno : 1,
+					pageno : 1,
+					startDate,
+					endDate,
+					searchType,
+					searchTerm
+				}
+			}).done(data=>{
+				console.log(data);
+				$("#orderContent").html(data);
+			});
+		}
+	}
+	
+	function pageBtn(pageno){
+		var startDate = sessionStorage.getItem("startDate");
+		var endDate = sessionStorage.getItem("endDate");
+		var searchType = sessionStorage.getItem("searchType");
+		var searchTerm = sessionStorage.getItem("searchTerm");
+		if(startDate && !endDate){
+			alert("날짜를 올바르게 입력하세요.");
+		} else if(endDate && !startDate){
+			alert("날짜를 올바르게 입력하세요.");
+		}else{
+			$.ajax({
+				url: "orderListAjax",
+				data: {pageno, startDate, endDate, searchType, searchTerm}
+			}).done(data=>{
+				$("#orderContent").html(data);
+			});
+		}
+	}
+	
+	
+	function cancelOrderAjax(data){
+		$.ajax({
+			type:"POST",
+			url:"cancelOrderAjax",
+			data: data
+		}).done((data)=>{
+			alert(data.message);
+			location.href = window.location.href;
+		});
+	}
+</script>
+
+</th:block>
+</th:block>
+</html>

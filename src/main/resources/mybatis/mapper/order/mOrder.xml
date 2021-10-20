@@ -47,15 +47,14 @@
 	
 	<select id="selectCountOrderListByName" resultType="int" parameterType="map">
 		select count(*)
-		from (       
+		from(
+		    select distinct od.order_no
+		    from (       
 		        select order_no, order_date, state
-		        from (
-		            select order_no, order_date, state
-		            from m_order
-		            where member_id = #{ID} and order_date between to_date(#{startDate},'yyyy-mm-dd') and to_date(#{endDate},'yyyy-mm-dd')+1
-		            order by order_date desc
-		        ) 
-		) A, order_detail od, product_detail pd, product p WHERE A.order_no = od.order_no AND od.product_detail_no = pd.product_detail_no AND pd.product_no = p.product_no and p.name like '%' || #{name} || '%'
+		        from m_order
+		        where member_id = #{ID} and order_date between to_date(#{startDate},'yyyy-mm-dd') and to_date(#{endDate},'yyyy-mm-dd')+1
+		    ) A, order_detail od, product_detail pd, product p WHERE A.order_no = od.order_no AND od.product_detail_no = pd.product_detail_no AND pd.product_no = p.product_no and p.name like '%'||#{name}||'%'
+		)
 	</select>
 	
 	<select id="selectOrderListByName" resultType="orderList" parameterType="map">
