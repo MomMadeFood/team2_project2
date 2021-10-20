@@ -371,9 +371,9 @@ p {
 										</div>
 										
 										<th:block th:each="card, status: ${cardList}">
-											<div th:classappend="|${#strings.equals(card.company,'삼성카드')? 'card bg-primary' : ''} ${#strings.equals(card.company,'국민카드') ? 'card bg-warning' : ''}
+											<div th:classappend="|${#strings.equals(card.company,'삼성카드')? 'card bg-primary' : ''} ${#strings.equals(card.company,'KB국민카드') ? 'card bg-warning' : ''}
 													${#strings.equals(card.company,'현대카드') ? 'card bg-secondary' : ''} ${#strings.equals(card.company,'롯데카드') ? 'card bg-danger' : ''}
-												|"
+												${status.index == 0 ? 'show' : ''}|"
 												th:style="${status.index == 0 ? 'height:140px; width:315px; margin:0px auto;
 													border:1px solid black; background-color: #F5F5F5;display:block' : 'height:140px; width:315px; margin:0px auto;
 													border:1px solid black; background-color: #F5F5F5;display:none'}"
@@ -699,7 +699,7 @@ p {
 	function clickRight(){
 		//console.log("------");
 		let showEle = document.querySelector(".show");
-		console.log(showEle.classList.contains("card"))
+		console.log(showEle)
 		if(showEle.nextElementSibling.classList.contains("card")){
 			
 			//console.log(showEle.nextElementSibling.nextElementSibling);
