@@ -371,44 +371,24 @@ p {
 										</div>
 										
 										<th:block th:each="card, status: ${cardList}">
-											<th:block th:switch="${card.company}">
-												<th:block th:case="삼성카드">
-													<div class="card bg-primary"
-												</th:block>
-												<th:block th:case="KB국민카드">
-													<div class="card bg-warning"
-												</th:block>
-												<th:block th:case="현대카드">
-													<div class="card bg-secondary"
-												</th:block>
-												<th:block th:case="롯데카드">
-													<div class="card bg-danger"
-												</th:block>									
-											</th:block>
-											<th:block th:if="${status.index == 0}">
-	    										show
-	    										
-											</th:block>
-												" style=" height:140px; width:315px; margin:0px auto;
-												border:1px solid black; background-color: #F5F5F5;
-											<th:block th:if="${status.index != 0}">
-	    										display:none
-											</th:block>
-											<th:block th:if="${status.index == 0}">
-	    										display:block
-	    									</th:block>
-												">
+											<div th:classappend="|${#strings.equals(card.company,'삼성카드')? 'card bg-primary' : ''} ${#strings.equals(card.company,'국민카드') ? 'card bg-warning' : ''}
+													${#strings.equals(card.company,'현대카드') ? 'card bg-secondary' : ''} ${#strings.equals(card.company,'롯데카드') ? 'card bg-danger' : ''}
+												|"
+												th:style="${status.index == 0 ? 'height:140px; width:315px; margin:0px auto;
+													border:1px solid black; background-color: #F5F5F5;display:block' : 'height:140px; width:315px; margin:0px auto;
+													border:1px solid black; background-color: #F5F5F5;display:none'}"
+												>
 												<div
-													style="height: 70%; border-bottom: 1px solid black; padding-left: 5px">
+														style="height: 70%; border-bottom: 1px solid black; padding-left: 5px">
 													<p id="card-company">[[${card.company}]]</p>
 													<div style="margin-top: 45px">
 														<p>유효기간: [[${#dates.format(card.expireDate, 'yyyy-MM-dd')}]]</p>
 													</div>
 												</div>
-												<div
-													style="height: 30%; text-align: center; padding-top: 10px; padding-left: 5px">
-													카드번호: <span id="card-no">${card.cardNo}</span>
+												<div style="height: 30%; text-align: center; padding-top: 10px; padding-left: 5px">
+													카드번호: <span id="card-no">[[${card.cardNo}]]</span>
 												</div>
+											</div>
 										</th:block>
 										<div style="display: flex; align-items: center;">
 											<div>
@@ -437,11 +417,7 @@ p {
 						</div>
 					</div>
 				</div>
-
-			</div>
-				
-		</div>
-			<div style="width: 32%; margin-left: 40px">
+ 				<div style="width: 32%; margin-left: 40px">
 					<div style="position: sticky; top: 110px;">
 						<div style="width: 310px; height: 250px; border: 1px solid black">
 							<div style="height: 80%;">
@@ -528,6 +504,10 @@ p {
 						</div>
 					</div>
 				</div>
+			</div>
+				
+		</div>
+			
 	</div>
 
 	<!-- Modal -->
