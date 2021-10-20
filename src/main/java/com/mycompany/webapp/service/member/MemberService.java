@@ -51,13 +51,13 @@ public class MemberService {
 		memberDTO.setPoint(point);
 		
 		//System.out.println(productList.get(0));
-		/*
+		
 		if(productList.size()>0) {
 			for(ProductDTO productDTO :  productList) {
 				productDetailList.add(productDAO.selectProductByProduct(productDTO));
 			}			
 		}
-*/
+
 
 		map.put("cardList",cardList);
 		map.put("virtureAccountList",virtureAccountList);
