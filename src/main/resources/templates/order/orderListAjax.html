@@ -1,0 +1,146 @@
+<div class="mt-5" >
+	<div style="width:990px; margin: 0px auto;">
+		<div style="display:flex; justify-content: space-between ;margin-top:40px">
+		  <div>
+		    <h5 style="font-weight:700">주문상품</h5>
+		  </div>
+		</div>
+	    <div>
+		  	<table class="table" style="border-bottom:1px solid #E5E5E5; margin-top:20px">
+			  <colgroup>
+			    <col width="15%"/>
+			    <col width="42%"/>
+			    <col width="7%"/>
+			    <col width="12%"/>
+			    <col width="12%"/>
+			    <col width="12%"/>
+			  </colgroup>
+			  <thead style="background-color: #F5F5F5;">
+			    <tr style="text-align: center; height:47px; font-size:15px; ">
+	    		  <th scope="col">주문번호</th>
+			      <th scope="col">상품정보</th>
+			      <th scope="col">수량</th>
+			      <th scope="col">금액</th>
+			      <th scope="col">주문상태</th>
+			      <th scope="col">구분</th>
+			    </tr>
+			  </thead>
+		  	   <th:block th:each="order : ${orderList}">
+			   	<tbody class="txt">
+			   		 <th:block th:each="orderDetail, status : ${order.detailList}">
+				  	  <tr style="height:150px;">
+				  	  	  <th:block th:if="${status.first}">
+						      <td style="vertical-align:middle" th:rowspan="${#lists.size(order.detailList)+1}">
+						      	<p>[[${order.orderNo}]]</p>
+						      	<p style="color:#dee2e6">[[${#dates.format(order.orderDate, 'yyy/MM/dd HH:mm:ss')}]]</p>
+						      	<a th:href="@{/order/orderDetail(orderNo=${order.orderNo})}" style="color: #ecd795">상세보기</a>
+						      </td>
+					      </th:block>
+					      <td style="vertical-align:middle; border-top:none;">
+					        <div style="display: flex; justify-content:between">
+					          <div>
+					            <img th:src="${orderDetail.img1}" style="width:98px; height:98px;">
+					          </div>
+					          <div style="text-align:left; margin-left:20px;">
+					            <a style="color:black;" href="@{/product/productDetail(no=${orderDetail.productDetailNo})}" >
+					              [[${orderDetail.brand}]]<br/>
+					              [[${orderDetail.name}]]
+					            </a>
+					            <p style="margin-top: 10px;font-size:12px;color:#CCC7CD">color :  <img th:src="${orderDetail.colorChip}" alt="" width="20px" height="20px"> / size : [[${orderDetail.psize}]]</p>
+					          </div>
+					        </div>
+					      </td>
+					      <td style="vertical-align:middle"><p>[[${orderDetail.amount}]]</p></td>
+					      <td style="vertical-align:middle">
+					      	<th:block th:if="${orderDetail.state!=6}">
+				      			<p>₩[[${#numbers.formatInteger(orderDetail.price+orderDetail.discount,3,'COMMA')}]]</p>
+					      	</th:block>
+					      	<th:block th:if="${orderDetail.state==6}">
+					      		<p>₩0</p>
+					      	</th:block>
+					      </td>
+					      <td style="vertical-align:middle">
+					      	<p>
+					      		<th:block th:if="${orderDetail.state == 1}">입금대기중</th:block>
+					      		<th:block th:if="${orderDetail.state == 2}">주문완료</th:block>
+					      		<th:block th:if="${orderDetail.state == 3}">배송준비중</th:block>
+					      		<th:block th:if="${orderDetail.state == 4}">배송중</th:block>
+					      		<th:block th:if="${orderDetail.state == 5}">배송완료</th:block>
+					      		<th:block th:if="${orderDetail.state == 6}">주문취소</th:block>
+					      	</p>
+			      		</td>
+					      <td style="vertical-align:middle">
+					      	<p>
+					      		<th:block th:if="${orderDetail.state == 1}">
+									<a th:href="|javascript:cancelOrderAjax(
+									{'orderDetailNo':'${orderDetail.orderDetailNo}',
+									'productDetailNo':'${orderDetail.productDetailNo}',
+									'psize':'${orderDetail.psize}',
+									'amount':${orderDetail.amount},
+									'price':${orderDetail.price}
+									})|" class="btn btn-sm btn-outline-secondary btn-search">주문취소</a>					      		
+					      		</th:block>
+					      	</p>
+			      		</td>
+				      </tr>
+				  </th:block>
+				  <tr style="height:50px;">
+				  	<td colspan="5" class="order-info" style="border:none; text-align: right; border-right: 1px solid #E5E5E5;">
+				  		총 결제 금액 : ₩[[${#numbers.formatInteger(order.totalOrderPrice,3,'COMMA')}]]
+				  	</td>
+			  	  </tr>
+			    </tbody>
+			  </th:block>
+			</table>
+		</div>
+	</div>
+  </div>
+
+<div class="mt-5">
+	<div style="width: 990px; margin: 0px auto;">
+	  <div style="display:flex; justify-content:center; width:100%">
+	  	<th:block th:if="${pager.totalRows != 0}">
+		    <nav aria-label="Page navigation example">
+			  <ul class="pagination">
+			    <li class="page-item">
+			      <a class="page-link" th:onclick="javascript:pageBtn(1)" aria-label="frist">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+			    </li>
+			     <th:block th:if="${pager.groupNo!=1}">
+				  <li class="page-item">
+			        <a class="page-link" th:onclick="pageBtn([[${pager.startPageNo-1}]])" aria-label="previous">
+			          <span aria-hidden="true">&lt;</span>
+			         </a>
+			      </li>
+				</th:block>
+			   <th:block th:each="i : ${#numbers.sequence(pager.startPageNo, pager.endPageNo)}">
+				 <th:block th:if="${pager.pageNo !=i}">
+				   <li class="page-item">
+				     <a class="page-link" th:onclick="pageBtn([[${i}]])">[[${i}]]</a>
+				   </li>
+				 </th:block>
+				  <th:block th:if="${pager.pageNo ==i}">
+				   <li class="page-item active">
+				     <a class="page-link " th:onclick="pageBtn([[${i}]])">[[${i}]]</a>
+				   </li>
+				  </th:block>
+				</th:block>
+				<th:block th:if="${pager.groupNo!=pager.totalGroupNo}">
+				  <li class="page-item">
+			        <a class="page-link" th:onclick="pageBtn([[${pager.endPageNo+1}]])" aria-label="next">
+			          <span aria-hidden="true">&gt;</span>
+			         </a>
+			      </li>
+				</th:block>
+			    <li class="page-item">
+			      <a class="page-link" th:onclick="pageBtn([[${pager.totalPageNo}]])" aria-label="end">
+			        <span aria-hidden="true">&raquo;</span>
+			       </a>
+			    </li>
+	   	      </ul>
+		    </nav>
+	    </c:if>
+	  </div>
+  </div>
+</div>
