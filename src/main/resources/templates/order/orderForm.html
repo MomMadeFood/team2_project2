@@ -90,7 +90,7 @@ p {
 							<th:block th:each="product, status: ${productList}">
 								<tr style="text-align: center; height: 132px;">
 									<td class="detail-id" style="display: none">[[${product.productDetailNo}]]</td>
-									<td class="d-flex"><img src="${product.img1}" alt=""
+									<td class="d-flex"><img th:src="${product.img1}" alt=""
 										style="width: 98px; height: 98px;">
 										<div style="text-align: left; margin-left: 20px;">
 											<a style="color: black;"
@@ -100,7 +100,7 @@ p {
 											<div style="display: flex">
 												<p style="margin-top: 10px; font-size: 12px; color: #CCC7CD"
 													class="detail-color">
-													color : <img src="${product.colorChip}" alt="" width="20px"
+													color : <img th:src="${product.colorChip}" alt="" width="20px"
 														height="20px"> / size :<span class="detail-size">[[${product.psize}]]</span>
 												</p>
 											</div>
@@ -108,7 +108,7 @@ p {
 									</td>
 
 									<td class="detail-amount"
-										style="border-left: 1px solid #E5E5E5; border-right: 1px solid #E5E5E5; vertical-align: middle;">${product.amount}</td>
+										style="border-left: 1px solid #E5E5E5; border-right: 1px solid #E5E5E5; vertical-align: middle;">[[${product.amount}]]</td>
 									<td class="priceList"
 										style="vertical-align: middle; border-right: 1px solid #E5E5E5;">
 										<div style="display: none; color: #c9bc30" class="originBox">
