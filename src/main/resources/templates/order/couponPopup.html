@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
+	<link rel="stylesheet" th:href="@{/css/couponPopup.css}" />
+</head>
+
+<body>
+	<script th:inline="javascript">
+		$(function (){
+			
+			var couponList = [[${couponList}]];
+			console.log(couponList);
+			if(couponList.length==0){
+				alert("사용 가능한 쿠폰이 없습니다.");
+				window.close();
+			}
+			$(".tr-1").css("background-color", "#fff2bb");
+		});
+		
+		function applyCoupon(){
+			var chkIdx = $('input:radio[name=chk_coupon]:checked').val();
+			
+			if(chkIdx==null){
+				alert("쿠폰을 선택해 주세요.")
+			}else{
+				var totalDiscountPrice = $("#totalDiscountPrice"+chkIdx).val();
+				var couponNo = $("#couponNo"+chkIdx).val();
+				var index = $("#indexBox").text();
+				window.opener.responseDiscountInfo(totalDiscountPrice,couponNo,index);
+				window.close();
+			}
+		}
+	</script>
+	<div>
+		<table style="border-bottom: 1px solid #E5E5E5;">
+			<colgroup>
+				<col width="45%" />
+				<col width="20%" />
+				<col width="15%" />
+				<col width="20%" />
+			</colgroup>
+			<thead style="background-color: #F5F5F5;">
+				<tr style="text-align: center; height: 47px; font-size: 15px;">
+					<th scope="col">쿠폰명</th>
+					<th scope="col">적용가능수량</th>
+					<th scope="col">할인</th>
+					<th scope="col">할인금액</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="coupon, status : ${couponList}">
+	      			<tr class="cp-tr txt tr-${status.count}">
+						<td class="detail-id" style="border-left: 1px solid #E5E5E5; border-right: 1px solid #E5E5E5;">
+							<div style="text-align:left; margin-left:20px">
+								<input type="radio" name="chk_coupon" value="${status.count}"/>　
+								<span style="text-align:left">[[${coupon.title}]]</span>
+							</div>
+						</td>
+						<td class="d-flex">1개</td>
+						<td class="detail-amount" style="border-left: 1px solid #E5E5E5; border-right: 1px solid #E5E5E5; vertical-align: middle;">
+							<th:block th:if="${coupon.discountType == '1'}" >
+								[[${coupon.discount}]]%
+							</th:block>
+							<th:block th:if="${coupon.discountType == '2'}" >
+								₩[[${#numbers.formatInteger(coupon.discount*10000,3,'COMMA')}]]
+							</th:block>
+						</td>
+						<td style="vertical-align: middle; border-right: 1px solid #E5E5E5">
+							₩[[${#numbers.formatInteger(coupon.totalDiscountPrice,3,'COMMA')}]]
+						</td>
+						<input type="hidden" th:value="${coupon.totalDiscountPrice}" th:id="|totalDiscountPrice${status.count}|"/>
+						<input type="hidden" th:value="${coupon.couponNo}" th:id="|couponNo${status.count}|"/>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		<div class="cp-btn-outer-wrap">
+			<div class="cp-btn-inner-wrap">
+				<button class="cp_lg_btn_white" onclick="javascript:window.close()">취소</button>
+				<button class="cp_lg_btn_black" onclick="javascript:applyCoupon()">쿠폰선택</button>
+			</div>
+		</div>
+		<div id="indexBox" style="display:none">[[${index}]]</div>
+	</div>
+</body>
+</html>

@@ -129,7 +129,7 @@ p {
 									<td style="vertical-align: middle;">
 										<button
 											class="btn btn-sm btn-outline-secondary btn-search cpBtn"
-											th:onclick="couponSelect([[${product.price/product.amount}]],'[[${product.brand}]]',[[${status.index}]])">적용</button>
+											th:onclick="couponSelect([[${product.price/product.amount}]],[[${product.brand}]],[[${status.index}]])">적용</button>
 										<button style="display: none; margin: 0px"
 											class="btn btn-sm btn-outline-secondary btn-search resetCpBtn"
 											th:onclick="resetCoupon([[${status.index}]])">취소</button>
@@ -572,7 +572,7 @@ p {
 			</div>
 		</div>
 	</div>
-<script>
+<script th:inline="javascript">
 
 	function reqlength(){
 		let rlen = ($("#request").val()).length;
@@ -583,7 +583,6 @@ p {
 			$("#reqVal").css("color","black");
 		}
 	}
-	
 	
 	function postForm(){
 		if(validation()==0)
@@ -724,16 +723,12 @@ p {
 		if(showEle.nextElementSibling.classList.contains("card")){
 			
 			//console.log(showEle.nextElementSibling.nextElementSibling);
-			
 
 			showEle.nextElementSibling.classList.add("show");
 			showEle.classList.remove("show");
 			showEle.style.display="none";
 			showEle.nextElementSibling.style.display="block";			
 		}
-
-		
-		
 	}
 	
 	function clickLeft(){
@@ -741,7 +736,6 @@ p {
 		if(showEle.previousElementSibling.classList.contains("card")){
 			
 			//console.log(showEle.nextElementSibling.nextElementSibling);
-			
 	
 			showEle.previousElementSibling.classList.add("show");
 			showEle.classList.remove("show");
@@ -805,8 +799,6 @@ p {
 		
 		let priceList = document.querySelectorAll(".priceList");
 		
-
-		
 		console.log(applyPoint+" "+remainPoint+" "+discountPoint+" "+prodPrice);
 		if(applyPoint>remainPoint){
 			alert("잔여 포인트보다 많은 포인트를 사용할 수 없습니다.");	
@@ -832,12 +824,9 @@ p {
 		}else{
 			$("#apply-point").val(0);
 		}
-		
 	}
 
 	function postOrderForm() {
-		
-		
 		let orderList = document.querySelectorAll("#orderTable tbody tr");
 		let memberId = document.querySelector(".member-id").innerHTML;
 		let recName = $("#recName").val();
@@ -858,10 +847,7 @@ p {
 		let pointTotal = convertNum(document.querySelector("#discount-point").innerHTML);
 		let couponTotal = convertNum(document.querySelector("#coupon").innerHTML);
 		
-		
-		
-		
-		console.log(orderList);
+		// console.log(orderList);
 		let radios = document.querySelectorAll(".payment-way");
 		
 		console.log(radios);
@@ -883,10 +869,8 @@ p {
 					
 			}
 		}
-		
 		//console.log(orderList,memberId,recName,hp,tel,request,recEmail,priceTotal,zipcode,addr,detailAddr,paymentType,point);
 		
-
 		let detailList = [];
 		let data = {
 				"memberId":memberId,
@@ -945,8 +929,7 @@ p {
 			data['paymentList[' + payIdx +'].paymentType'] = "쿠폰";
 			data['paymentList[' + payIdx +'].price'] = couponTotal;
 		}
-		console.log(data);
-		
+		//console.log(data);
 		
 		$.ajax({
 			type:"POST",
@@ -964,19 +947,20 @@ p {
 			}
 		});	
 		
-		
 	}
 	
 	function couponSelect(price, brand, index){
 		
-		var productListSize = '<c:out value="${fn:length(productList)}"/>';
+		var productList= [[${productList}]];
 		
 		var usedCoupon = "";
-		for(var i = 0 ; i < productListSize ; i++){
+		for(var i = 0 ; i < productList.length ; i++){
 			if(localStorage.getItem("c"+i))
 				usedCoupon += localStorage.getItem("c"+i);
 		}
-		console.log(usedCoupon);
+		console.log(price);
+		console.log(brand);
+		console.log(index);
 		
 		var x = (window.screen.width / 2) - (600 / 2);
 		var y= (window.screen.height /2) - (400 / 2);
@@ -1009,11 +993,9 @@ p {
 		couponIdBox.innerHTML = couponNo;
 		document.querySelector("#total-price").innerHTML = convertPrice(totalPrice - parseInt(totalDiscountPrice));
 		detailPrice.innerHTML = convertPrice(price - parseInt(totalDiscountPrice));
-		
 
 		//appliedCoupon.style.display="block";
 		//console.log(couponIdBox.innerHTML);
-
 		
 		let cpBtn = parent.querySelector(".cpBtn");
 		let resetCpBtn = parent.querySelector(".resetCpBtn");
