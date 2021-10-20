@@ -292,8 +292,7 @@ div.info_sect {
 	word-break: break-word;
 	font-size: 13px;
 	letter-spacing: 1px;
-	font-family: "Malgun Gothic", "맑은 고딕", "Dotum", "돋움", AppleGothic,
-		sans-serif;
+	font-family: "Malgun Gothic", "맑은 고딕", "Dotum", "돋움", AppleGothic, sans-serif;
 }
 
 .pd-recent-title{
