@@ -6,11 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +18,12 @@ import com.mycompany.webapp.dto.product.ProductNewDTO;
 import com.mycompany.webapp.service.coupon.CouponService;
 import com.mycompany.webapp.service.product.ProductService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class HomeController {
 	
-	private static Logger logger = LoggerFactory.getLogger(HomeController.class);
-
 	@Resource
 	private ProductService productService;
 	
@@ -67,7 +64,7 @@ public class HomeController {
 		}else {
 			result = "이미 발급된 쿠폰입니다.";
 		}
-		logger.info("사용자 ID: "+reqParam.get("memberId")+", 결과 : "+data.get("result").toString());
+		log.info("사용자 ID: "+reqParam.get("memberId")+", 결과 : "+data.get("result").toString());
 		map.put("data",data);
 	    return map;
 	}

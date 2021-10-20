@@ -952,15 +952,11 @@ p {
 	function couponSelect(price, brand, index){
 		
 		var productList= [[${productList}]];
-		
 		var usedCoupon = "";
 		for(var i = 0 ; i < productList.length ; i++){
 			if(localStorage.getItem("c"+i))
 				usedCoupon += localStorage.getItem("c"+i);
 		}
-		console.log(price);
-		console.log(brand);
-		console.log(index);
 		
 		var x = (window.screen.width / 2) - (600 / 2);
 		var y= (window.screen.height /2) - (400 / 2);
@@ -973,7 +969,6 @@ p {
 	}
 	
 	function responseDiscountInfo(totalDiscountPrice,couponNo,index){
-		
 		localStorage.setItem("c"+index, couponNo);
 		
 		let parent = document.querySelectorAll("#orderTable tbody > tr")[index];
@@ -985,7 +980,6 @@ p {
 		let detailPrice = parent.querySelector(".detail-price");
 		let price  = convertNum(detailPrice.innerHTML);
 		
-		//console.log(couponSum);
 		couponSum  = couponSum + parseInt(totalDiscountPrice);
 		$("#coupon").text(convertPrice(couponSum));
 		
@@ -1025,13 +1019,10 @@ p {
 		let detailPrice = parent.querySelector(".detail-price");
 		let price  = convertNum(detailPrice.innerHTML);
 		
-		
 		detailPrice.innerHTML = convertPrice(price + parseInt(totalDiscountPrice));
 		
 		let couponSum = convertNum($("#coupon").text());
-		
 		//console.log(couponSum);
-		
 		couponSum  = couponSum - totalDiscountPrice;
 		
 		document.querySelector("#total-price").innerHTML = convertPrice(totalPrice + totalDiscountPrice)
