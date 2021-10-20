@@ -39,7 +39,6 @@ import com.mycompany.webapp.service.coupon.CouponService;
 import com.mycompany.webapp.service.member.MemberService;
 import com.mycompany.webapp.service.order.OrderService;
 
-import jdk.internal.org.jline.utils.Log;
 
 
 @Controller
