@@ -54,10 +54,7 @@ public class ProductService {
 					List<String> colorList = new ArrayList<>();
 					colorList.add(productColor.getColorChip());
 					productColorMap.put(productColor.getProductNo(), colorList);
-					
-					System.out.println(">>>>>>>> 1 => " + productColor.getColorChip());
 				}else {
-					System.out.println(">>>>>>>> 2 => " + productColor.getColorChip());
 					productColorMap.get(productColor.getProductNo()).add(productColor.getColorChip());
 				}
 			}
